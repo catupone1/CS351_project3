@@ -1,6 +1,12 @@
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 
+/**
+ * 
+ * @author Caleb Tupone
+ * @author McRae Massey
+ */
+
 public class Heap {
 	/** Temporary storage for the paths starting at tempPath[1]. */
 	private ArrayList<PathNode> tempPath;
