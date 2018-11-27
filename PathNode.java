@@ -24,6 +24,20 @@ public class PathNode implements Comparable {
 	private boolean isLastNode;
 	
 	/**
+	 * 
+	 * @param path
+	 */
+	public PathNode(ArrayList<Integer> path){
+		this.path = path;
+		this.left = null;
+		this.right = null;
+		this.parent = null;
+		this.generation = null;
+		isLevelEnd = false;
+		isLastNode = false;
+	}
+	
+	/**
 	 * Returns the path that is assigned to this node
 	 * @return the path stored within the path node
 	 */

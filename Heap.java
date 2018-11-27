@@ -1,5 +1,13 @@
+import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Scanner;
+import java.util.stream.Stream;
 
 /**
  * 
@@ -10,6 +18,10 @@ import java.util.ArrayList;
 public class Heap {
 	/** Temporary storage for the paths starting at tempPath[1]. */
 	private ArrayList<PathNode> tempPath;
+	
+	public void go(String args){
+		readPaths(args);
+	}
 
 /**
 * Reads inputFile given at the command line and places the contents of each line into the
@@ -20,7 +32,28 @@ public class Heap {
  * @return 
 * @throws FileNotFoundException if the input file cannot be found.
 */
-	void readPaths(String inputFile) throws FileNotFoundException
+	void readPaths(String inputFile){
+		ArrayList<ArrayList<String>> data = new ArrayList<ArrayList<String>>();
+		ArrayList<String> line = new ArrayList<String>();
+		try{
+			Scanner scan = new Scanner(new File(inputFile));
+			while(scan.hasNext()){
+				line.add(scan.nextLine());
+				
+			}
+			System.out.println(line.toString());
+			//System.out.println(data.toString());
+			for(int i = 0;i<line.size();i++){
+				String[] s = line.get(i).split("%s");
+				//Integer.parseInt();
+			}
+
+			scan.close();
+		}catch(FileNotFoundException fnf){
+			System.err.println("file not found!");
+			fnf.printStackTrace();
+		}
+	}
 
 	/**
 	 * Recursively builds a complete binary tree. Places PathNode objects in
@@ -36,6 +69,7 @@ public class Heap {
 	 * @return A reference to the node just placed in the tree.
 	 */
 	PathNode buildCompleteTree(int index, int parent) {
+		return null;
 
 	}
 
