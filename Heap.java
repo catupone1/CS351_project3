@@ -17,42 +17,53 @@ import java.util.stream.Stream;
 
 public class Heap {
 	/** Temporary storage for the paths starting at tempPath[1]. */
-	private ArrayList<PathNode> tempPath;
-	
-	public void go(String args){
+	private ArrayList<PathNode> tempPath = new ArrayList<PathNode>();
+
+	public void go(String args) throws FileNotFoundException {
 		readPaths(args);
+		System.out.println(tempPath);
 	}
 
-/**
-* Reads inputFile given at the command line and places the contents of each line into the
-* path field found in each PathNode object. The order is the same as found in the text file.
-* Adds the PathNode object to tempPath starting at tempPath[1].
-*
-* @param inputFile Name of the input file to be read.
- * @return 
-* @throws FileNotFoundException if the input file cannot be found.
-*/
-	void readPaths(String inputFile){
-		ArrayList<ArrayList<String>> data = new ArrayList<ArrayList<String>>();
+	/**
+	 * Reads inputFile given at the command line and places the contents of each
+	 * line into the path field found in each PathNode object. The order is the
+	 * same as found in the text file. Adds the PathNode object to tempPath
+	 * starting at tempPath[1].
+	 *
+	 * @param inputFile
+	 *            Name of the input file to be read.
+	 * @return
+	 * @throws FileNotFoundException
+	 *             if the input file cannot be found.
+	 */
+	private void readPaths(String inputFile) throws FileNotFoundException {
+		tempPath.add(null);
+
 		ArrayList<String> line = new ArrayList<String>();
-		try{
-			Scanner scan = new Scanner(new File(inputFile));
-			while(scan.hasNext()){
-				line.add(scan.nextLine());
-				
-			}
-			System.out.println(line.toString());
-			//System.out.println(data.toString());
-			for(int i = 0;i<line.size();i++){
-				String[] s = line.get(i).split("%s");
-				//Integer.parseInt();
+
+		Scanner scan = new Scanner(new File(inputFile));
+		while (scan.hasNext()) {
+			line.add(scan.nextLine());
+
+		}
+		
+
+		for (int i = 0; i < line.size(); i++) {
+			ArrayList<Integer> data = new ArrayList<Integer>();
+			String[] path = line.get(i).split(" ");
+
+			for (String a : path) {
+
+				data.add(Integer.parseInt(a));
 			}
 
-			scan.close();
-		}catch(FileNotFoundException fnf){
-			System.err.println("file not found!");
-			fnf.printStackTrace();
+			PathNode node = new PathNode(data);
+
+			tempPath.add(node);
+
 		}
+
+		scan.close();
 	}
 
 	/**

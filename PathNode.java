@@ -8,6 +8,8 @@ import java.util.ArrayList;
  */
 
 public class PathNode implements Comparable {
+	
+
 	/** An ArrayList of vertex IDs ordered by appearance in the path. */
 	private ArrayList<Integer> path;
 	/** Reference to the left child. */
@@ -22,6 +24,10 @@ public class PathNode implements Comparable {
 	private boolean isLevelEnd;
 	/** True if the node is the right-most node in the last level. */
 	private boolean isLastNode;
+	
+	public PathNode(){
+		
+	}
 	
 	/**
 	 * 
@@ -136,6 +142,11 @@ public class PathNode implements Comparable {
 	 */
 	public void setLastNode(boolean isLastNode) {
 		this.isLastNode = isLastNode;
+	}
+	
+	@Override
+	public String toString() {
+		return this.getPath() + "";
 	}
 	
 	// TODO FINISH COMPARETO
