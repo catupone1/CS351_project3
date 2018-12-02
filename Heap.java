@@ -1,13 +1,7 @@
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Scanner;
-import java.util.stream.Stream;
 
 /**
  * 
@@ -46,7 +40,6 @@ public class Heap {
 			line.add(scan.nextLine());
 
 		}
-		
 
 		for (int i = 0; i < line.size(); i++) {
 			ArrayList<Integer> data = new ArrayList<Integer>();
@@ -80,8 +73,18 @@ public class Heap {
 	 * @return A reference to the node just placed in the tree.
 	 */
 	PathNode buildCompleteTree(int index, int parent) {
-		return null;
+		//only insert if in list
+		if (index > tempPath.size() - 1) {
+	        return null;
+	    }
+		//node to insert
+	    PathNode localRoot = tempPath.get(index);
+	    //left child
+	    localRoot.setLeft(buildCompleteTree(2*index, index));
+	    //right child
+	    localRoot.setLeft(buildCompleteTree(2*index+1, index));
 
+	    return localRoot;
 	}
 
 	/**
