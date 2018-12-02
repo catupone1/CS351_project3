@@ -79,6 +79,8 @@ public class Heap {
 	    }
 		//node to insert
 	    PathNode localRoot = tempPath.get(index);
+	    //parent
+	    localRoot.setParent(tempPath.get(parent));
 	    //left child
 	    localRoot.setLeft(buildCompleteTree(2*index, index));
 	    //right child
