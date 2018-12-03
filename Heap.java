@@ -14,8 +14,13 @@ public class Heap {
 	private ArrayList<PathNode> tempPath = new ArrayList<PathNode>();
 
 	public void go(String args) throws FileNotFoundException {
+		PathNode iAmRoot = new PathNode();
 		readPaths(args);
-		System.out.println(tempPath);
+		iAmRoot = buildCompleteTree(1, 0);
+		// System.out.println(tempPath);
+		setLevelEnd(iAmRoot);
+		
+		setGenerationLinks(iAmRoot);
 	}
 
 	/**
@@ -73,20 +78,20 @@ public class Heap {
 	 * @return A reference to the node just placed in the tree.
 	 */
 	PathNode buildCompleteTree(int index, int parent) {
-		//only insert if in list
+		// only insert if in list
 		if (index > tempPath.size() - 1) {
-	        return null;
-	    }
-		//node to insert
-	    PathNode localRoot = tempPath.get(index);
-	    //parent
-	    localRoot.setParent(tempPath.get(parent));
-	    //left child
-	    localRoot.setLeft(buildCompleteTree(2*index, index));
-	    //right child
-	    localRoot.setLeft(buildCompleteTree(2*index+1, index));
+			return null;
+		}
+		// node to insert
+		PathNode localRoot = tempPath.get(index);
+		// parent
+		localRoot.setParent(tempPath.get(parent));
+		// left child
+		localRoot.setLeft(buildCompleteTree(2 * index, index));
+		// right child
+		localRoot.setRight(buildCompleteTree(2 * index + 1, index));
 
-	    return localRoot;
+		return localRoot;
 	}
 
 	/**
@@ -97,6 +102,12 @@ public class Heap {
 	 * @return
 	 */
 	void setLevelEnd(PathNode root) {
+		root.setLevelEnd(true);
+
+		if ((root.getLeft() != null)) {
+
+			setLevelEnd(root.getLeft());
+		}
 
 	}
 
@@ -110,7 +121,16 @@ public class Heap {
 	 * @return
 	 */
 	void setGenerationLinks(PathNode root) {
+		
+		if(root.getParent() == null){
+			setGenerationLinks(root.getLeft());
+		}
+		root.setGeneration(root.getParent().getRight());
+		if ((root.getLeft() != null)) {
 
+			setGenerationLinks(root.getLeft());
+		}
+		
 	}
 
 	/**
@@ -122,6 +142,7 @@ public class Heap {
 	 * @return
 	 */
 	void printTreeLevels(PathNode root) {
+		
 
 	}
 }
