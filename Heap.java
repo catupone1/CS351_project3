@@ -13,14 +13,24 @@ public class Heap {
 	/** Temporary storage for the paths starting at tempPath[1]. */
 	private ArrayList<PathNode> tempPath = new ArrayList<PathNode>();
 
+	boolean flag = true;
+
+	int counter = 0;
+
+	boolean heapified = false;
+
 	public void go(String args) throws FileNotFoundException {
 		PathNode iAmRoot = new PathNode();
 		readPaths(args);
 		iAmRoot = buildCompleteTree(1, 0);
 		// System.out.println(tempPath);
 		setLevelEnd(iAmRoot);
-		
+
 		setGenerationLinks(iAmRoot);
+
+		// After heapify
+		//heapified = true;
+		printTreeLevels(iAmRoot);
 	}
 
 	/**
@@ -121,16 +131,32 @@ public class Heap {
 	 * @return
 	 */
 	void setGenerationLinks(PathNode root) {
-		
-		if(root.getParent() == null){
-			setGenerationLinks(root.getLeft());
-		}
-		root.setGeneration(root.getParent().getRight());
-		if ((root.getLeft() != null)) {
+		PathNode tmp = new PathNode();
 
-			setGenerationLinks(root.getLeft());
+		if (root.getRight() != null) {
+			root.getLeft().setGeneration(root.getRight());
+
 		}
-		
+
+		tmp = root;
+		while (tmp.getGeneration() != null) {
+
+			tmp = tmp.getGeneration();
+
+			if (tmp.getGeneration() == null) {
+				if (tmp.getParent().getGeneration() != null) {
+					tmp.setGeneration(tmp.getParent().getGeneration().getLeft());
+				} else if (tmp.getParent().getRight() != null && tmp.getParent().getRight() != tmp) {
+					tmp.setGeneration(tmp.getParent().getRight());
+				}
+			}
+
+		}
+		if (root.getLeft() != null)
+			setGenerationLinks(root.getLeft());
+
+	
+
 	}
 
 	/**
@@ -142,7 +168,36 @@ public class Heap {
 	 * @return
 	 */
 	void printTreeLevels(PathNode root) {
-		
+		if (flag == true) {
+			if (heapified == false) {
+				System.out.println("---------- Before Heapify ----------");
+				flag = false;
+			} else {
+				System.out.println("---------- After Heapify ----------");
+				flag = false;
+			}
+
+		}
+
+		if (counter == 0) {
+			System.out.print("Root:    " + (root.getPath().size() - 1) + root);
+		} else {
+			PathNode tmp = new PathNode();
+			tmp = root;
+			System.out.print("Level " + counter + ": ");
+			System.out.print("" + (tmp.getPath().size() - 1) + tmp + "--> ");
+			while (tmp.getGeneration() != null) {
+				tmp = tmp.getGeneration();
+				System.out.print("" + (tmp.getPath().size() - 1) + tmp);
+				if (tmp.getGeneration() != null)
+					System.out.print("--> ");
+			}
+
+		}
+		counter++;
+		System.out.println("");
+		if (root.getLeft() != null)
+			printTreeLevels(root.getLeft());
 
 	}
 }
