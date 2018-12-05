@@ -12,9 +12,9 @@ import java.util.Scanner;
 public class Heap {
 	/** Temporary storage for the paths starting at tempPath[1]. */
 	private ArrayList<PathNode> tempPath = new ArrayList<PathNode>();
-
+	/**flag used for printing before heapify and after*/
 	boolean flag = true;
-
+	/**counts the number of levels in the heap*/
 	int counter = 0;
 
 	boolean heapified = false;
@@ -27,10 +27,38 @@ public class Heap {
 		setLevelEnd(iAmRoot);
 
 		setGenerationLinks(iAmRoot);
-
-		// After heapify
-		//heapified = true;
+		// print before heapify
 		printTreeLevels(iAmRoot);
+
+		heapify(iAmRoot);
+		// After heapify
+		heapified = true;
+		printTreeLevels(iAmRoot);
+	}
+
+	private void heapify(PathNode root) {
+
+		PathNode temp = new PathNode();
+
+		if (root.getRight() != null && root.getLeft() != null) {
+			PathNode left = root.getLeft();
+			PathNode right = root.getRight();
+
+			if ((left.getPath().size() - 1) > (root.getPath().size() - 1)) {
+				// root = left data
+				temp = left;
+				left = root;
+				root = temp;
+
+			} else if ((right.getPath().size() - 1) > (root.getPath().size() - 1)) {
+				// root = right data
+				temp = right;
+				right = root;
+				root = temp;
+			}
+			heapify(root.getGeneration());
+		}
+		// change root here
 	}
 
 	/**
@@ -155,8 +183,6 @@ public class Heap {
 		if (root.getLeft() != null)
 			setGenerationLinks(root.getLeft());
 
-	
-
 	}
 
 	/**
@@ -173,7 +199,7 @@ public class Heap {
 				System.out.println("---------- Before Heapify ----------");
 				flag = false;
 			} else {
-				System.out.println("---------- After Heapify ----------");
+				System.out.println("\n---------- After Heapify ----------");
 				flag = false;
 			}
 
