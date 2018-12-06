@@ -1,13 +1,13 @@
 import java.util.ArrayList;
 
 /**
- * 
+ * Creates a node object to be used in a complete binary tree.
  * @author Caleb Tupone
  * @author McRae Massey
  *
  */
 
-public class PathNode implements Comparable {
+public class PathNode{
 
 	/** An ArrayList of vertex IDs ordered by appearance in the path. */
 	private ArrayList<Integer> path;
@@ -179,13 +179,6 @@ public class PathNode implements Comparable {
 	@Override
 	public String toString() {
 		return this.getPath() + "";
-	}
-
-	// TODO FINISH COMPARETO
-	@Override
-	public int compareTo(Object arg0) {
-
-		return 0;
 	}
 
 	@Override

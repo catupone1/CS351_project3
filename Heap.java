@@ -4,21 +4,30 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 /**
+ * Creates a complete tree of PathNode objects from passed file of paths
+ * then the tree is heapified and printed.
  * 
  * @author Caleb Tupone
  * @author McRae Massey
  */
-
 public class Heap {
 	/** Temporary storage for the paths starting at tempPath[1]. */
 	private ArrayList<PathNode> tempPath = new ArrayList<PathNode>();
-	/** flag used for printing before heapify and after */
+	/** Flag used for printing before heapify if true and after heapify
+	 *  if false.
+	 */
 	boolean flag = true;
-	/** counts the number of levels in the heap */
+	/** Counts the number of levels in the heap. */
 	int counter = 0;
-
+	/** Tells us if we have heapified the tree. */
 	boolean heapified = false;
 
+	/**
+	 * Called by the driver to run the program.
+	 * 
+	 * @param args
+	 *            file to be read in.
+	 */
 	public void go(String args) throws FileNotFoundException {
 		PathNode iAmRoot = new PathNode();
 		readPaths(args);
@@ -38,9 +47,12 @@ public class Heap {
 	}
 
 	/**
+	 * Swaps a child node with parent node if childs path is shorter than the
+	 * parents to create a min heap.
 	 * 
 	 * @param root
-	 * @return
+	 *            of unheapified sub tree
+	 * @return root of heapified tree
 	 */
 	private PathNode heapify(PathNode root) {
 
@@ -55,14 +67,14 @@ public class Heap {
 			PathNode right = root.getRight();
 
 			if (left.getPath().size() - 1 <= right.getPath().size() - 1) {
-				if ((left.getPath().size() - 1) < (root.getPath().size() - 1)) {
+				if ((left.getPath().size() - 1) < (root.getPath().size() - 1)){
 					// root = left data
 					swap(root, left);
 					heapify(left);
 				}
 			}
 
-			else if (right.getPath().size() - 1 < (root.getPath().size() - 1)) {
+			else if (right.getPath().size() - 1 < (root.getPath().size() - 1)){
 				// root = right data
 				swap(root, right);
 				heapify(right);
@@ -84,9 +96,12 @@ public class Heap {
 	}
 
 	/**
+	 * Swaps the paths of root node and child node.
 	 * 
 	 * @param root
+	 *            parent node
 	 * @param child
+	 *            child node
 	 */
 	private void swap(PathNode root, PathNode child) {
 		PathNode temp = new PathNode();
@@ -96,14 +111,13 @@ public class Heap {
 	}
 
 	/**
-	 * Reads inputFile given at the command line and places the contents of each
-	 * line into the path field found in each PathNode object. The order is the
-	 * same as found in the text file. Adds the PathNode object to tempPath
+	 * Reads inputFile given at the command line and places the contents of
+	 * each line into the path field found in each PathNode object. The order is
+	 * the same as found in the text file. Adds the PathNode object to tempPath
 	 * starting at tempPath[1].
 	 *
 	 * @param inputFile
 	 *            Name of the input file to be read.
-	 * @return
 	 * @throws FileNotFoundException
 	 *             if the input file cannot be found.
 	 */
@@ -154,7 +168,6 @@ public class Heap {
 		if (index > tempPath.size() - 1) {
 			return null;
 		}
-
 		// node to insert
 		PathNode localRoot = tempPath.get(index);
 		// parent
@@ -164,10 +177,6 @@ public class Heap {
 
 		// right child
 		localRoot.setRight(buildCompleteTree(2 * index + 1, index));
-		// if (localRoot.getRight() == null && localRoot.getLeft() != null){
-		// localRoot.getLeft().setLastNode(true);
-		//
-		// }
 
 		return localRoot;
 	}
@@ -177,7 +186,6 @@ public class Heap {
 	 * 
 	 * @param root
 	 *            Root of the subtree.
-	 * @return
 	 */
 	private void setLevelEnd(PathNode root) {
 		root.setLevelEnd(true);
@@ -189,6 +197,12 @@ public class Heap {
 
 	}
 
+	/**
+	 * Checks and sets the last node in the heap.
+	 * 
+	 * @param PathNode
+	 *            root potential last node of tree.
+	 */
 	private void setLastNode(PathNode root) {
 		if (root.getLeft() != null) {
 
@@ -205,11 +219,10 @@ public class Heap {
 	/**
 	 * Recursive method that sets the "generation" link of PathNode objects from
 	 * left-to-right. generation is a term I use to indicate nodes on the same
-	 * level (these may be siblings or cousins)
+	 * level (these may be siblings or cousins).
 	 * 
 	 * @param root
 	 *            Root of the subtree.
-	 * @return
 	 */
 	private void setGenerationLinks(PathNode root) {
 		PathNode tmp = new PathNode();
@@ -227,7 +240,8 @@ public class Heap {
 			if (tmp.getGeneration() == null) {
 				if (tmp.getParent().getGeneration() != null) {
 					tmp.setGeneration(tmp.getParent().getGeneration().getLeft());
-				} else if (tmp.getParent().getRight() != null && tmp.getParent().getRight() != tmp) {
+				} else if (tmp.getParent().getRight() != null &&
+						tmp.getParent().getRight() != tmp) {
 					tmp.setGeneration(tmp.getParent().getRight());
 				}
 			}
@@ -244,7 +258,6 @@ public class Heap {
 	 * 
 	 * @param root
 	 *            Root of the whole tree to begin printing from.
-	 * @return
 	 */
 	private void printTreeLevels(PathNode root) {
 		if (flag == true) {
@@ -255,7 +268,6 @@ public class Heap {
 				System.out.println("\n---------- After Heapify ----------");
 				flag = false;
 			}
-
 		}
 
 		if (counter == 0) {
