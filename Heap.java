@@ -12,9 +12,9 @@ import java.util.Scanner;
 public class Heap {
 	/** Temporary storage for the paths starting at tempPath[1]. */
 	private ArrayList<PathNode> tempPath = new ArrayList<PathNode>();
-	/**flag used for printing before heapify and after*/
+	/** flag used for printing before heapify and after */
 	boolean flag = true;
-	/**counts the number of levels in the heap*/
+	/** counts the number of levels in the heap */
 	int counter = 0;
 
 	boolean heapified = false;
@@ -23,42 +23,76 @@ public class Heap {
 		PathNode iAmRoot = new PathNode();
 		readPaths(args);
 		iAmRoot = buildCompleteTree(1, 0);
-		// System.out.println(tempPath);
 		setLevelEnd(iAmRoot);
-
 		setGenerationLinks(iAmRoot);
+		setLastNode(iAmRoot);
+
 		// print before heapify
 		printTreeLevels(iAmRoot);
 
-		heapify(iAmRoot);
-		// After heapify
+		iAmRoot = heapify(iAmRoot);
+		flag = true;
 		heapified = true;
+		counter = 0;
 		printTreeLevels(iAmRoot);
 	}
 
-	private void heapify(PathNode root) {
+	/**
+	 * 
+	 * @param root
+	 * @return
+	 */
+	private PathNode heapify(PathNode root) {
 
-		PathNode temp = new PathNode();
+		if (root.getLeft() != null) {
+			heapify(root.getLeft());
+		} else {
+			return null;
+		}
 
 		if (root.getRight() != null && root.getLeft() != null) {
 			PathNode left = root.getLeft();
 			PathNode right = root.getRight();
 
-			if ((left.getPath().size() - 1) > (root.getPath().size() - 1)) {
-				// root = left data
-				temp = left;
-				left = root;
-				root = temp;
-
-			} else if ((right.getPath().size() - 1) > (root.getPath().size() - 1)) {
-				// root = right data
-				temp = right;
-				right = root;
-				root = temp;
+			if (left.getPath().size() - 1 <= right.getPath().size() - 1) {
+				if ((left.getPath().size() - 1) < (root.getPath().size() - 1)) {
+					// root = left data
+					swap(root, left);
+					heapify(left);
+				}
 			}
-			heapify(root.getGeneration());
+
+			else if (right.getPath().size() - 1 < (root.getPath().size() - 1)) {
+				// root = right data
+				swap(root, right);
+				heapify(right);
+			}
+
+			if (root.getGeneration() != null)
+				heapify(root.getGeneration());
+
+		} else if (root.getLeft() != null) {
+			PathNode left = root.getLeft();
+			if ((left.getPath().size() - 1) < (root.getPath().size() - 1)) {
+				// root = left data
+				swap(root, left);
+				heapify(left);
+			}
 		}
-		// change root here
+		return root;
+
+	}
+
+	/**
+	 * 
+	 * @param root
+	 * @param child
+	 */
+	private void swap(PathNode root, PathNode child) {
+		PathNode temp = new PathNode();
+		temp.setPath(child.getPath());
+		child.setPath(root.getPath());
+		root.setPath(temp.getPath());
 	}
 
 	/**
@@ -120,14 +154,20 @@ public class Heap {
 		if (index > tempPath.size() - 1) {
 			return null;
 		}
+
 		// node to insert
 		PathNode localRoot = tempPath.get(index);
 		// parent
 		localRoot.setParent(tempPath.get(parent));
 		// left child
 		localRoot.setLeft(buildCompleteTree(2 * index, index));
+
 		// right child
 		localRoot.setRight(buildCompleteTree(2 * index + 1, index));
+		// if (localRoot.getRight() == null && localRoot.getLeft() != null){
+		// localRoot.getLeft().setLastNode(true);
+		//
+		// }
 
 		return localRoot;
 	}
@@ -139,7 +179,7 @@ public class Heap {
 	 *            Root of the subtree.
 	 * @return
 	 */
-	void setLevelEnd(PathNode root) {
+	private void setLevelEnd(PathNode root) {
 		root.setLevelEnd(true);
 
 		if ((root.getLeft() != null)) {
@@ -147,6 +187,19 @@ public class Heap {
 			setLevelEnd(root.getLeft());
 		}
 
+	}
+
+	private void setLastNode(PathNode root) {
+		if (root.getLeft() != null) {
+
+			setLastNode(root.getLeft());
+		} else {
+			if (root.getGeneration() != null) {
+				root = root.getGeneration();
+			} else {
+				root.setLastNode(true);
+			}
+		}
 	}
 
 	/**
@@ -158,7 +211,7 @@ public class Heap {
 	 *            Root of the subtree.
 	 * @return
 	 */
-	void setGenerationLinks(PathNode root) {
+	private void setGenerationLinks(PathNode root) {
 		PathNode tmp = new PathNode();
 
 		if (root.getRight() != null) {
@@ -193,7 +246,7 @@ public class Heap {
 	 *            Root of the whole tree to begin printing from.
 	 * @return
 	 */
-	void printTreeLevels(PathNode root) {
+	private void printTreeLevels(PathNode root) {
 		if (flag == true) {
 			if (heapified == false) {
 				System.out.println("---------- Before Heapify ----------");
